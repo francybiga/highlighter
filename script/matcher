@@ -1,0 +1,57 @@
+#!/usr/bin/env python
+evernote_file = open('evernote_in', 'r')
+highlight_file = open('highlight_in','r')
+
+def find_all(string, text):
+    #print 'DEBUG: finding occcurrences of ' + string
+    start = 0
+    result = []
+    while True:
+        idx = text.find(string, start) 
+        if idx == -1: 
+            #print 'end of the story'
+            break
+        result.append(idx)
+        start = idx + len(string)
+        #print 'found at ' + str(idx) + ', new search from ' + str(start)
+    return result
+
+def match_string_in_xml(string, text):
+    if len(string) > len(text): return None
+    print 'DEBUG: matching: "' + string + '"'
+
+    start_idices = find_all(string[0], text) 
+    if len(start_idices) == 0: return None
+
+   # print 'DEBUG: string starts at: ' + str(start_idices)
+    
+    for start_idx in start_idices:
+        end_idx = None 
+        for i in range(len(string)):
+            print  string[i] + ' testing with ' + text[start_idx+i],
+            if string[i] != text[start_idx+i]:
+                end_idx = None
+                print ' does not match'
+                print ' --------------\n\n'
+                break
+            else:
+                end_idx = start_idx + i
+                print ' matches at ' + str(end_idx)
+
+    return (start_idx, end_idx)
+
+def match_highlight(highlight, text):
+    #TODO: improve using UNICODE
+    return match_string_in_xml(highlight, text) 
+
+def main():    
+    original_note = evernote_file.read()
+
+    for highlight in highlight_file:
+       #remove the pipe delimiter and strip leading/trailing whitespaces
+       highlight = highlight.replace('|','').strip()
+       print highlight + " matches at: " + str(match_highlight(highlight, original_note))
+
+if __name__ == '__main__':
+    main()
+
