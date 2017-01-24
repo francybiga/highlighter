@@ -16,8 +16,9 @@ def log_append(string, level=Log.info):
 
 def log_flush():
     global log
-    print log
-    log = ''
+    if len(log) > 0:
+        print log
+        log = ''
 
 def log_delete():
     global log
