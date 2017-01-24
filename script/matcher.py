@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-evernote_file = open('evernote_in', 'r')
-highlight_file = open('highlight_in','r')
 
 class Log:
     info = 1
@@ -24,7 +22,7 @@ def log_delete():
     global log
     log = ''
 
-def matching_indexes(string, text):
+def match_highlight(string, text):
     if len(string) > len(text): return None
 
     matching_idxs = []
@@ -53,23 +51,37 @@ def matching_indexes(string, text):
                     end_idx = None
                     log_delete()
                     log_append('BUM - ' + string[str_idx] + '(' + str(str_idx) + ')' + '!=' + text[text_idx] + '(' + str(text_idx) + ')', Log.debug)
+                    start_idx = text.find(string[0], start_idx + 1) #compute the next matching index of the first character to begin a new matching series attempt
                     break     #when you encounter a character not matching the matching series is broken, thus go ahead breaking the loop
-        if end_idx != None:     #if at the end of the matching series the end index is valid it means we have a match! add it to the matching_idxs list
-            matching_idxs.append((start_idx, end_idx))
+        if end_idx != None:     
+            hl_opening_tag = '<span style="background-color: rgb(153, 250, 153);-evernote-highlight:true">'
+            hl_closing_tag = '</span>'
+            log_append('old text: ' + text[start_idx:end_idx+1], Log.debug)
+            text = text[:start_idx] + hl_opening_tag + text[start_idx:end_idx+1] + hl_closing_tag + text[end_idx+1:]
+            end_idx = end_idx + len(hl_opening_tag) + len(hl_closing_tag)#we should recompute the end idx adding the size of the opening tag
+            log_append('new text: ' + text[start_idx:end_idx + 1], Log.debug)
+            log_append('starting new search from index ' + str(end_idx), Log.debug)
             log_flush()
-        start_idx = text.find(string[0], start_idx + 1) #compute the next matching index of the first character to begin a new matching series attempt
-    return matching_idxs 
-
-def match_highlight(highlight, text):
-    #TODO: improve using UNICODE
-    return matching_indexes(highlight, text) 
+            start_idx = text.find(string[0], end_idx)
+    return text 
 
 def main():    
+    evernote_file = open('evernote_in.enex', 'r')
+    highlight_file = open('highlight_in','r')
+
     original_note = evernote_file.read()
+    note = original_note
     for highlight in highlight_file:
         #remove the pipe delimiter and strip leading/trailing whitespaces
-       highlight = highlight.replace('|','').strip()
-       print '"' + highlight + '"' + "\nmatches at: " + str(match_highlight(highlight, original_note))
+        highlight = highlight.replace('|','').strip()
+        note = match_highlight(highlight, note)
+
+    note_file = open('result.enex', 'w')
+    note_file.write(note)
+
+    note_file.close()
+    evernote_file.close()
+    highlight_file.close()
 
 if __name__ == '__main__':
     main()
