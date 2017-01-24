@@ -9,20 +9,26 @@ def matching_indexes(string, text):
     start_idx = text.find(string[0], 0) #start with the first match of the first character of the highlight
     while start_idx != -1: #if the first character match, go ahead matching all the subsequent chars of string
         end_idx = None 
-        for i in range(len(string)):
-            #print  string[i] + ' testing with ' + text[start_idx+i],
-            if string[i] != text[start_idx+i]:
-                end_idx = None
-                #print ' does not match'
-                #print ' --------------\n\n'
-                break     #when you encounter a character not matching the matching series is broken, thus go ahead breaking the loop
+        tag_offset = 0
+        str_idx = 0
+        while str_idx < len(string): 
+            text_idx = start_idx + str_idx + tag_offset
+            if string[str_idx] == text[text_idx]:
+                end_idx = text_idx
+                log_append(string[str_idx] + '(' + str(str_idx) + ')' + '==' + text[text_idx] + '(' + str(text_idx) + ')', Log.debug)
+                str_idx += 1
             else:
-                end_idx = start_idx + i
-                #print ' matches at ' + str(end_idx)
+                if text[text_idx] == '<': #if we find a '<' character (not present in the highlight string, we search for the tag close character and, using the tag offset variable, we "jump" till the end of the tag to continue the matching attempt
+                    tag_end_idx = text.find('>', text_idx)
+                    if tag_end_idx != -1:
+                        tag_offset += tag_end_idx - text_idx + 1
+                else:
+                    end_idx = None
+                    break     #when you encounter a character not matching the matching series is broken, thus go ahead breaking the loop
         if end_idx != None:     #if at the end of the matching series the end index is valid it means we have a match! add it to the matching_idxs list
             #print '-> match found at (%d, %d)' % (start_idx, end_idx)
             matching_idxs.append((start_idx, end_idx))
-        start_idx = text.find(string[0], start_idx + len(string)) #compute the next matching index of the first character to begin a new matching series attempt
+        start_idx = text.find(string[0], start_idx + 1) #compute the next matching index of the first character to begin a new matching series attempt
     return matching_idxs 
 
 def match_highlight(highlight, text):
