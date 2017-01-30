@@ -1,0 +1,10 @@
+dev_token: your_dev_token_value
+input_notebook_name: a_notebook_name
+output_notebook_name: a_notebook_name
+
+dev_token: your dev token value
+highlights_dir: the dir path where to find the highlight text files
+input_notebook_name: the notebook where to find notes to highlight
+output_notebook_name: the notebook where to put the highlighted notes
+backup_notebook_name: the notebook where to copy original notes after the highlight process; this is optional
+

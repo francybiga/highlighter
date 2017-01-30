@@ -1,4 +1,3 @@
 tags
 *.swp
-dev_token
-
+config.yml
