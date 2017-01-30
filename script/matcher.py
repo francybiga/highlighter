@@ -54,7 +54,7 @@ def match_highlight(string, text):
                     start_idx = text.find(string[0], start_idx + 1) #compute the next matching index of the first character to begin a new matching series attempt
                     break     #when you encounter a character not matching the matching series is broken, thus go ahead breaking the loop
         if end_idx != None:     
-            hl_opening_tag = '<span style="background-color: rgb(153, 250, 153);-evernote-highlight:true">'
+            hl_opening_tag = '<span style="background-color: rgb(255, 250, 165);-evernote-highlight:true">'
             hl_closing_tag = '</span>'
             log_append('old text: ' + text[start_idx:end_idx+1], Log.debug)
             text = text[:start_idx] + hl_opening_tag + text[start_idx:end_idx+1] + hl_closing_tag + text[end_idx+1:]
