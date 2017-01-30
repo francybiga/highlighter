@@ -76,25 +76,3 @@ def match_highlight_file_to_note(highlight_path, note_content):
     highlight_file.close()
     return note_content
 
-
-#def main():    
-#    evernote_file = open('evernote_in.enex', 'r')
-#    highlight_file = open('highlight_in','r')
-#
-#    original_note = evernote_file.read()
-#    note = original_note
-#    for highlight in highlight_file:
-#        #remove the pipe delimiter and strip leading/trailing whitespaces
-#        highlight = highlight.replace('|','').strip()
-#        note = match_highlight(highlight, note)
-#
-#    note_file = open('result.enex', 'w')
-#    note_file.write(note)
-#
-#    note_file.close()
-#    evernote_file.close()
-#    highlight_file.close()
-#
-#if __name__ == '__main__':
-#    main()
-
