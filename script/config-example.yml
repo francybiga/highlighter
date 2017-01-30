@@ -1,7 +1,3 @@
-dev_token: your_dev_token_value
-input_notebook_name: a_notebook_name
-output_notebook_name: a_notebook_name
-
 dev_token: your dev token value
 highlights_dir: the dir path where to find the highlight text files
 input_notebook_name: the notebook where to find notes to highlight
