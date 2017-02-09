@@ -4,6 +4,8 @@ import yaml
 import os
 import logging
 
+from subprocess import call
+
 from matcher import match_highlight_file_to_note
 
 from evernote.api.client import EvernoteClient
@@ -86,6 +88,8 @@ def main():
                 logging.info('Matching note found:')
                 logging.info('title: %s', note_meta.title)
                 logging.info('hl text file: %s\n', hl_filename_no_ext)
+                number_of_hl = call(['wc -l %s', hl_filename])
+                logging.info('nuber of highlights: %d', number_of_hl)
 
                 original_note = note_store.getNote(dev_token, note_meta.guid, True, False, False, False)
 
