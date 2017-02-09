@@ -45,7 +45,7 @@ def main():
     logging.info('----------------------------\n')
 
     #Initialize Evernote stack
-    client = EvernoteClient(token=dev_token)
+    client = EvernoteClient(token=dev_token, sandbox=False)
     note_store = client.get_note_store()
     notebooks = note_store.listNotebooks()
 
