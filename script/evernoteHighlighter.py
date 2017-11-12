@@ -24,7 +24,8 @@ def copyNoteWithNewContent(original_note, content, notebook_guid):
 
 def main():
 
-    logging.basicConfig(format='%(message)s', level=logging.INFO)
+    logging.basicConfig(filename='out.log', format='%(message)s', level=logging.INFO)
+    logging.getLogger().addHandler(logging.StreamHandler()) #log both to file and to stderr
 
     #Load configuration
     config = yaml.load(open('config.yml', 'r'))
