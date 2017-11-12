@@ -4,7 +4,7 @@ import yaml
 import os
 import logging
 
-from subprocess import call
+from subprocess import check_output
 
 from matcher import match_highlight_file_to_note
 
@@ -88,13 +88,14 @@ def main():
                 logging.info('Matching note found:')
                 logging.info('title: %s', note_meta.title)
                 logging.info('hl text file: %s\n', hl_filename_no_ext)
-                number_of_hl = call(['wc -l %s', hl_filename])
-                logging.info('nuber of highlights: %d', number_of_hl)
 
                 original_note = note_store.getNote(dev_token, note_meta.guid, True, False, False, False)
 
                 #match highlight in note content
                 os.chdir(highlights_dir)
+                wc_command = 'wc -l <' + hl_filename
+                number_of_hl = check_output(wc_command, shell=True).lstrip()
+                logging.info('number of highlights: %s', number_of_hl)
                 hl_file_path = os.path.abspath(hl_filename)
                 hl_content = match_highlight_file_to_note(hl_file_path, original_note.content)
                 
